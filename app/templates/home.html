@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container">
+  <div class="starter">
+    <h1 id="title">ToDo Web-App</h1>
+    <!-- Executes Todo Modal -->
+    <div>
+      <button id="add-button" type="submit" class="btn btn-outline-primary" data-toggle="modal"
+        data-target="#todo-modal" data-id="New Task">Add</button>
+    </div>
+    <!-- Todo Modal -->
+    <div class="modal fade" id="todo-modal" tabindex="-1" role="dialog" aria-labelledby="modal-label"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-label">New Task</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="\">
+              <div class="form-group">
+                <label for="date" class="col-form-label">Due by:</label>
+                <input class="form-control bg-white" type="date" id="date">
+              </div>
+              <div class="form-group">
+                <label for="task-description" id="task-form-display" class="col-form-label">Description:</label>
+                <textarea class="form-control" id="task-description" name="task-description"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="sTask" type="button" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">TASK</th>
+          <th scope="col">DUE</th>
+          <th scope="col">STATUS</th>
+          <th scope="col">EDIT</th>
+          <th scope="col">REMOVE</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in user.tasks %}
+        <tr>
+          <!-- ID -->
+          <th scope="row">{{task.id}}</th>
+          <!-- TASK -->
+          <td class="td-break">{{task.task}}</td>
+          <!-- DUE DATE -->
+          {% if task.date != None %}
+          <td class="timeLeft">{{task.date.strftime('%Y-%m-%d')}}</td>
+          {% else %}
+          <td></td>
+          {% endif %}
+          <!-- STATUS -->
+          {% if task.status == "In Progress" %}
+          <td><button type="button" class="btn btn-outline-warning status"
+              data-id="{{task.id}}">{{task.status}}</button>
+          </td>
+          {% elif task.status == "Todo" %}
+          <td><button type="button" class="btn btn-outline-secondary status"
+              data-id="{{task.id}}">{{task.status}}</button>
+          </td>
+          {% else %}
+          <!-- "Complete" -->
+          <td><button type="button" class="btn btn-outline-success status"
+              data-id="{{task.id}}">{{task.status}}</button>
+          </td>
+          {%endif%}
+          <!-- Edit Button -->
+          <td>
+            <button id="eButton" type="submit" class="btn btn-outline-primary remove-border"
+              data-target="#eModal{{task.id}}" data-toggle="modal">
+              <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+          </td>
+          <!-- Remove Button -->
+          <td>
+            <button id="remove" type="submit" class="btn btn-outline-primary remove-border"
+              onclick="deleteTask( '{{task.id}}' )">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+          </td>
+        </tr>
+        <!-- Edit Task Modal -->
+        <div class="modal fade" id="eModal{{task.id}}" tabindex="-1" role="dialog" aria-labelledby="eModal-label"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="label">Edit Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form method="POST" action="{{ url_for('posts.update', id=task.id) }}">
+                  <div class="form-group">
+                    <!-- Due Date -->
+                    <label for="eDate" class="col-form-label">Due by:</label>
+                    <!-- <input class="form-control" type="date" id="eDate" name="eDate"> -->
+                    <input class="form-control bg-white" type="date" id="eDate" name="eDate">
+                  </div>
+                  <div class="form-group">
+                    <!-- Description -->
+                    <label for="eText" class="col-form-label" id="task-form-display">Description:</label>
+                    <textarea class="form-control" id="eText" name="eText">{{task.task}}</textarea>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="eSubmit" type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock content %}

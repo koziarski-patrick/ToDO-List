@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Section: Design Block -->
+<section class="text-center">
+    <div class="p-5 bg-image banner"></div>
+    <div class="card mx-4 mx-md-5 shadow-5-strong">
+        <div class="card-body py-5 px-md-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-5">Sign In</h2>
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        <!-- Email -->
+                        <div class="input-group mb-2">
+                            {% if form.email.errors %}
+                            {{ form.email(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                <span> {{ error }} </span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="bi bi-envelope-fill"></i>
+                                </span>
+                            </div>
+                            {{ form.email(class="form-control", placeholder="Email address") }}
+                            {% endif %}
+                        </div>
+                        {{ form.email.label(class="form-label mb-4") }}
+
+                        <!-- Password -->
+                        <div class="input-group mb-2">
+                            {% if form.password.errors %}
+                            {{ form.password(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                <span> {{ error }} </span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="bi bi-key-fill"></i>
+                                </span>
+                            </div>
+                            {{ form.password(class="form-control", placeholder="Password") }}
+                            {% endif %}
+                        </div>
+                        {{ form.password.label(class="form-label mb-4") }}
+
+                        <!-- Checkbox -->
+                        <div class="form-check flex-row mb-4">
+                            {{ form.remember(class="form-check-input me-2") }}
+                            {{ form.remember.label(class="form-check-label") }}
+                        </div>
+
+                        <!-- Submit -->
+                        {{ form.submit(class="btn btn-primary btn-block mb-4") }}
+
+                        <!-- Register -->
+                        <div class="text-center">
+                            <p>Don't have an account? <a href="{{ url_for('users.register') }}">Sign up now!</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
